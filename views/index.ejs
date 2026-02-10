@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Between The Panels</title>
+    <link rel="stylesheet" href="/styles/main.css" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Asimovian&family=Bangers&family=Bruno+Ace+SC&family=Zalando+Sans+Expanded:wght@200..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/favicon.png" />
+
+    <!-- Bootstrap Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/styles/main.css" />
+  </head>
+
+  <body>
+    <div class="manga-bg">
+      <header class="site-header">
+        <div class="container">
+          <div class="brand">
+            <h1 class="site-title">BETWEEN THE PANELS</h1>
+            <p class="site-subtitle">
+              My personal log of watched anime — with scores and tiny notes.
+              Sort by <strong>title</strong>, <strong>mark</strong>, or
+              <strong>date added</strong>.
+            </p>
+          </div>
+          <nav class="sort-nav" aria-label="Sort options">
+            <span class="sort-label">SORT:</span>
+            <a
+              class="sort-link <%= sort === 'title' ? 'active' : '' %>"
+              href="/?sort=title"
+              >title</a
+            >
+            <a
+              class="sort-link <%= sort === 'best' ? 'active' : '' %>"
+              href="/?sort=best"
+              >mark</a
+            >
+            <a
+              class="sort-link <%= sort === 'newest' ? 'active' : '' %>"
+              href="/?sort=newest"
+              >date added</a
+            >
+          </nav>
+        </div>
+      </header>
+      <main class="container">
+        <section class="entries">
+          <% (entries || []).forEach((a) => { %>
+          <article class="entry">
+            <div class="cover">
+              <% if (a.cover_url) { %>
+              <img
+                src="<%= a.cover_url %>"
+                alt="<%= (a.custom_name || a.title) %> cover"
+                loading="lazy"
+              />
+              <% } else { %>
+              <div class="cover-placeholder">no cover</div>
+              <% } %>
+            </div>
+            <div class="content">
+              <div class="top">
+                <!-- Title block: English/custom name + original title underneath -->
+                <div class="title-block">
+                  <h2 class="title-main"><%= a.custom_name || a.title %></h2>
+                  <% if (a.custom_name && a.title && a.custom_name !== a.title){
+                  %>
+                  <p class="title-sub">(<%= a.title %>)</p>
+                  <% } %>
+                </div>
+                <% if (a.created_at) { %>
+                <p class="date">
+                  Added:<time datetime="<%= a.created_at %>">
+                    <%= new Date(a.created_at).toLocaleDateString('en-GB', {day:
+                    '2-digit', month: 'short', year:'numeric' }) %>
+                  </time>
+                </p>
+                <% } %>
+              </div>
+              <p class="stats">
+                <span class="badge"
+                  >Mark: <strong><%= (a.rating ?? '-') %></strong>/10</span
+                >
+                <% if (a.episodes) { %>
+                <span class="badge"
+                  >Episodes: <strong><%= a.episodes %></strong></span
+                >
+                <% } %>
+              </p>
+              <% if (a.note) { %>
+              <p class="note"><%= a.note %></p>
+              <% } %> <% if (a.mal_url) { %>
+              <p class="link-row">
+                <a
+                  class="external"
+                  href="<%= a.mal_url %>"
+                  target="_blank"
+                  rel="noreferrer"
+                  >Open on MyAnimeList →</a
+                >
+              </p>
+              <% } %>
+            </div>
+          </article>
+          <hr class="divider" />
+          <% }) %>
+        </section>
+      </main>
+    </div>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p class="footer-copy">
+          © <%= new Date().getFullYear() %> Between The Panels · Diana Hydzik
+        </p>
+        <div class="footer-links">
+          <!-- GitHub -->
+          <a
+            href="https://github.com/zivasann"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="GitHub"
+          >
+            <i class="bi bi-github"></i>
+          </a>
+          <!-- Email -->
+          <a href="mailto:hydzik.diana@gmail.com" aria-label="Email">
+            <i class="bi bi-envelope-fill"></i>
+          </a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
